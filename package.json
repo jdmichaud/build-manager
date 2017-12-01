@@ -19,6 +19,7 @@
   "dependencies": {
     "githubhook": "^1.9.1",
     "jsonschema": "^1.2.0",
-    "ssh-exec": "^2.0.0"
+    "ssh-exec": "^2.0.0",
+    "tmp": "0.0.33"
   }
 }
