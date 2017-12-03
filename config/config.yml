@@ -1,0 +1,11 @@
+ssh:
+  host: 172.17.0.1
+  port: 22
+  user: ubuntu
+repositories: []
+hook:
+  host: 0.0.0.0
+  port: 8122
+  path: /github/callback
+  secret: chut
+

@@ -6,7 +6,6 @@ RUN node --version
 
 RUN mkdir app
 ADD package.json /app
-ADD config.schema.json /app
 ADD server.js /app
 
 WORKDIR /app

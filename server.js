@@ -1,25 +1,41 @@
+const fs = require('fs');
 const tmp = require('tmp');
 const githubhook = require('githubhook');
-const { validate } = require('jsonschema');
 const ssh = require('ssh-exec');
+const YAML = require('yamljs');
 
-const config = validate(
-  require('./config.json'),
-  require('./config.schema.json'),
-  { throwError: true }
-).instance;
-
-const handler = githubhook(config.hook);
-
-handler.on('push', (repos, ref) => {
-  if (config.repositories.indexOf(repos) !== -1 && ref === 'refs/heads/master') {
-    const command = `
-      cd $DOCKER_COMPOSE_PATH &&
-      docker-compose build --no-cache ${repos.toLowerCase()} &&
-      docker-compose up -d &&
-      docker system prune -f`;
-    ssh(command, config.ssh).pipe(process.stdout);
+function failIfUndefined(object, field) {
+  if (object[field] === undefined) {
+    console.error(`missing ${field} in configuration`);
+    process.exit(0);
   }
-});
+}
 
-handler.listen();
+function validateConfig(config) {
+  failIfUndefined(config, 'ssh');
+  failIfUndefined(config.ssh, 'host');
+  failIfUndefined(config.ssh, 'port');
+  failIfUndefined(config.ssh, 'user');
+  failIfUndefined(config, 'repositories');
+  failIfUndefined(config, 'hook');
+  return config;
+}
+
+const config = validateConfig(YAML.parse(fs.readFileSync('/config/config.yml').toString()));
+
+//const handler = githubhook(config.hook);
+
+//handler.on('push', (repos, ref) => {
+//  if (config.repositories.indexOf(repos) !== -1 && ref === 'refs/heads/master') {
+//    const command = `
+//      cd $DOCKER_COMPOSE_PATH &&
+//      docker-compose build --no-cache ${repos.toLowerCase()} &&
+//      docker-compose up -d &&
+//      docker system prune -f`;
+//    ssh(command, config.ssh).pipe(process.stdout);
+//  }
+//});
+//
+//handler.listen();
+
+ssh("ls", config.ssh).pipe(process.stdout);
