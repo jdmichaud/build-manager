@@ -23,19 +23,17 @@ function validateConfig(config) {
 
 const config = validateConfig(YAML.parse(fs.readFileSync('/config/config.yml').toString()));
 
-//const handler = githubhook(config.hook);
+const handler = githubhook(config.hook);
 
-//handler.on('push', (repos, ref) => {
-//  if (config.repositories.indexOf(repos) !== -1 && ref === 'refs/heads/master') {
-//    const command = `
-//      cd $DOCKER_COMPOSE_PATH &&
-//      docker-compose build --no-cache ${repos.toLowerCase()} &&
-//      docker-compose up -d &&
-//      docker system prune -f`;
-//    ssh(command, config.ssh).pipe(process.stdout);
-//  }
-//});
-//
-//handler.listen();
+handler.on('push', (repos, ref) => {
+ if (config.repositories.indexOf(repos) !== -1 && ref === 'refs/heads/master') {
+   const command = `
+     cd $DOCKER_COMPOSE_PATH &&
+     docker-compose build --no-cache ${repos.toLowerCase()} &&
+     docker-compose up -d &&
+     docker system prune -f`;
+   ssh(command, config.ssh).pipe(process.stdout);
+ }
+});
 
-ssh("ls", config.ssh).pipe(process.stdout);
+handler.listen();
