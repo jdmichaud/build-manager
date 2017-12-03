@@ -25,11 +25,11 @@ const config = validateConfig(YAML.parse(fs.readFileSync('/config/config.yml').t
 
 const handler = githubhook(config.hook);
 
-handler.on('push', (repos, ref) => {
- if (config.repositories.indexOf(repos) !== -1 && ref === 'refs/heads/master') {
+handler.on('push', (repo, ref) => {
+ if (config.repositories.indexOf(repo) !== -1 && ref === 'refs/heads/master') {
    const command = `
      cd $DOCKER_COMPOSE_PATH &&
-     docker-compose build --no-cache ${repos.toLowerCase()} &&
+     docker-compose build --no-cache ${repo.toLowerCase()} &&
      docker-compose up -d &&
      docker system prune -f`;
    ssh(command, config.ssh).pipe(process.stdout);
