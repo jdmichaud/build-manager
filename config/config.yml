@@ -8,4 +8,6 @@ hook:
   port: 8122
   path: /github/callback
   secret: chut
+compose:
+  path: /path/to/docker-compose/
 

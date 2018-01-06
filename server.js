@@ -18,6 +18,8 @@ function validateConfig(config) {
   failIfUndefined(config.ssh, 'user');
   failIfUndefined(config, 'repositories');
   failIfUndefined(config, 'hook');
+  failIfUndefined(config, 'compose');
+  failIfUndefined(config.compose, 'path');
   return config;
 }
 
@@ -28,7 +30,7 @@ const handler = githubhook(config.hook);
 handler.on('push', (repo, ref) => {
  if (config.repositories.indexOf(repo) !== -1 && ref === 'refs/heads/master') {
    const command = `
-     cd $DOCKER_COMPOSE_PATH &&
+     cd ${config.compose.path} &&
      docker-compose build --no-cache ${repo.toLowerCase()} &&
      docker-compose up -d &&
      docker system prune -f`;
