@@ -46,14 +46,21 @@ handler.listen();
 // Bitbucket
 const bbhandler = bitbuckethook(config.hooks.bitbucket);
 
-bbhandler.on('push', (repo, ref) => {
- if (config.hooks.bitbucket.repositories.indexOf(repo) !== -1 && ref === 'master') {
-   const command = `
-     cd ${config.compose.path} &&
-     docker-compose build --no-cache ${repo.toLowerCase()} &&
-     docker-compose up -d &&
-     docker system prune -f`;
-   ssh(command, config.ssh).pipe(process.stdout);
+bbhandler.on('push', (path, ref) => {
+ if (config.hooks.bitbucket.repositories.indexOf(path) !== -1 && ref === 'master') {
+  // Because docker-compose is not able to use the ssh public key when clone
+  // a private repo (https://github.com/docker/compose/issues/2856), we have
+  // to clone the repo manually into /tmp.
+  // We'll do this only for bitbucket, which hosts the private repos.
+  repo = path.split('/')[1];
+  const command = `
+    rm -fr /tmp/${repo} &&
+    git clone git@bitbucket.org:${path}.git /tmp/${repo}
+    cd ${config.compose.path} &&
+    docker-compose build --no-cache ${repo.toLowerCase()} &&
+    docker-compose up -d &&
+    docker system prune -f`;
+  ssh(command, config.ssh).pipe(process.stdout);
  }
 });
 
