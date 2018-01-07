@@ -17,6 +17,9 @@
   },
   "homepage": "https://github.com/josselinbuils/build-manager#readme",
   "dependencies": {
+    "bitbucket-hook": "^0.1.2",
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
     "githubhook": "^1.9.1",
     "ssh-exec": "^2.0.0",
     "tmp": "0.0.33",
