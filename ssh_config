@@ -1,0 +1,4 @@
+Host 172.17.0.1
+  CheckHostIP no
+  StrictHostKeyChecking no
+  UserKnownHostsFile=/dev/null

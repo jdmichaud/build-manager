@@ -7,6 +7,10 @@ COPY . /app
 
 WORKDIR /app
 
+# Allow the container to ssh without knowing the host
+RUN mkdir -p /etc/ssh/ && \
+  cat ssh_config >> /etc/ssh/ssh_config
+
 RUN npm install --production && \
   chmod 700 server.js
 
