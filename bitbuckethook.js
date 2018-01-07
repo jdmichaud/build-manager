@@ -16,7 +16,7 @@ module.exports = function (config) {
 
   // Create web hook
   config.repositories.forEach((repo) => {
-    app.post(config.path, bitbucket(repo, 'master'), function () {
+    app.post(config.path, bitbucket(repo, 'master', true), function () {
       events.push(repo, 'master');
     });
   });

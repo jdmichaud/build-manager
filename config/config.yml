@@ -13,7 +13,8 @@ hooks:
     host: 0.0.0.0
     port: 8123
     path: /bitbucket/callback
-    repositories: ['owner/repo']
+    repositories:
+      - 'owner/repo'
 compose:
   path: /path/to/docker-compose/
 
