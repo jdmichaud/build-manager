@@ -2,11 +2,8 @@ FROM alpine:latest
 
 RUN apk add --update --no-cache bash nodejs nodejs-npm
 
-RUN node --version
-
 RUN mkdir app
-ADD package.json /app
-ADD server.js /app
+COPY . /app
 
 WORKDIR /app
 
