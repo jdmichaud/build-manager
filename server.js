@@ -25,7 +25,7 @@ function validateConfig(config) {
   return config;
 }
 
-const config = validateConfig(YAML.parse(fs.readFileSync('config/config.yml').toString()));
+const config = validateConfig(YAML.parse(fs.readFileSync('/config/config.yml').toString()));
 
 // Github
 const handler = githubhook(config.hooks.github);
