@@ -60,7 +60,7 @@ bbhandler.on('push', (path, ref) => {
     git clone git@bitbucket.org:${path}.git /tmp/${repo}
     cd ${config.compose.path} &&
     docker-compose build --no-cache ${repo.toLowerCase()} &&
-    docker-compose up -d &&
+    docker-compose up -d ${repo.toLowerCase()} &&
     docker system prune -f`;
   ssh(command, config.ssh).pipe(process.stdout);
  }
