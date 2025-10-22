@@ -1,6 +1,6 @@
 FROM alpine:latest
 
-RUN apk add --update --no-cache bash nodejs nodejs-npm
+RUN apk add --update --no-cache bash nodejs npm
 
 RUN mkdir app
 COPY . /app
